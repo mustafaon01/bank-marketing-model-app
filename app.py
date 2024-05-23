@@ -17,7 +17,7 @@ def preprocess_input(data):
     data.fillna(data.mode().iloc[0], inplace=True)
 
     # Drop unnecessary columns
-    data = data.drop(["day_of_week", "month", "default", "euribor3m"], axis='columns')
+    data.drop(["day_of_week", "month", "default", "euribor3m"], axis='columns', inplace=True)
 
     # Encode categorical variables using one-hot encoding
     categorical_cols = ['job', 'marital', 'education', 'housing', 'loan', 'contact', 'poutcome']

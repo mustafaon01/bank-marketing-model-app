@@ -11,7 +11,7 @@ model = joblib.load('bank-additional.sav')
 df = pd.read_csv('bank-additional.csv', sep=';')
 
 # Preprocess the data
-def preprocess_input(data):
+def preprocess_input(data, feature_columns):
     # Handle missing values
     data = data.replace('unknown', np.nan)
     data = data.replace('nonexistent', np.nan)
@@ -25,12 +25,31 @@ def preprocess_input(data):
     present_categorical_cols = [col for col in categorical_cols if col in data.columns]
     data = pd.get_dummies(data, columns=present_categorical_cols, drop_first=True)
 
+    # Ensure all feature columns are present
+    for col in feature_columns:
+        if col not in data.columns:
+            data[col] = 0
+
+    # Reorder columns to match the training set
+    data = data[feature_columns]
+
     # Scale numerical columns
-    numerical_cols = ['age', 'campaign', 'pdays', 'previous', 'emp_var_rate', 'cons_price_idx', 'cons_conf_idx', 'nr_employed', 'duration']
+    numerical_cols = ['age', 'campaign', 'pdays', 'previous', 'emp.var.rate', 'cons.price.idx', 'cons.conf.idx', 'nr.employed', 'duration']
     scaler = StandardScaler()
     data[numerical_cols] = scaler.fit_transform(data[numerical_cols])
 
     return data
+
+# Load feature columns used during training
+# You should define `feature_columns` based on your training dataset
+# Here, you need to ensure you define the exact feature columns as used during training
+feature_columns = [
+    # Add all the columns used in the training dataset here
+    'age', 'campaign', 'pdays', 'previous', 'emp.var.rate', 'cons.price.idx', 'cons.conf.idx', 'nr.employed', 'duration',
+    'job_admin.', 'job_blue-collar', 'job_entrepreneur', 'job_housemaid', 'job_management', 'job_retired', 'job_self-employed', 'job_services', 'job_student', 'job_technician', 'job_unemployed',
+    'marital_married', 'marital_single', 'education_basic.6y', 'education_basic.9y', 'education_high.school', 'education_illiterate', 'education_professional.course', 'education_university.degree',
+    'housing_yes', 'loan_yes', 'contact_telephone', 'poutcome_nonexistent', 'poutcome_success'
+]
 
 st.title('Bank Marketing Prediction')
 
@@ -59,12 +78,12 @@ duration = st.number_input('Duration of last contact', value=50)
 # Create DataFrame for input data
 input_data = pd.DataFrame({
     'age': [age], 'job': [job], 'marital': [marital], 'education': [education], 'housing': [housing], 'loan': [loan],
-    'contact': [contact], 'campaign': [campaign], 'pdays': [pdays], 'previous': [previous], 'emp_var_rate': [emp_var_rate],
-    'cons_price_idx': [cons_price_idx], 'cons_conf_idx': [cons_conf_idx], 'nr_employed': [nr_employed], 'duration': [duration]
+    'contact': [contact], 'campaign': [campaign], 'pdays': [pdays], 'previous': [previous], 'emp.var.rate': [emp_var_rate],
+    'cons.price.idx': [cons_price_idx], 'cons.conf.idx': [cons_conf_idx], 'nr.employed': [nr_employed], 'duration': [duration]
 })
 
 # Preprocess input data
-input_data = preprocess_input(input_data)
+input_data = preprocess_input(input_data, feature_columns)
 
 if st.button('Predict'):
     prediction = model.predict(input_data)

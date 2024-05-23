@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
-import joblib
 import numpy as np
+import joblib
 from sklearn.preprocessing import StandardScaler
 
 # Load the trained model
@@ -22,7 +22,8 @@ def preprocess_input(data):
 
     # Encode categorical variables using one-hot encoding
     categorical_cols = ['job', 'marital', 'education', 'housing', 'loan', 'contact', 'poutcome']
-    data = pd.get_dummies(data, columns=categorical_cols, drop_first=True)
+    present_categorical_cols = [col for col in categorical_cols if col in data.columns]
+    data = pd.get_dummies(data, columns=present_categorical_cols, drop_first=True)
 
     # Scale numerical columns
     numerical_cols = ['age', 'campaign', 'pdays', 'previous', 'emp.var.rate', 'cons.price.idx', 'cons.conf.idx', 'nr.employed', 'duration']
@@ -59,7 +60,7 @@ duration = st.number_input('Duration of last contact', value=50)
 input_data = pd.DataFrame({
     'age': [age], 'job': [job], 'marital': [marital], 'education': [education], 'housing': [housing], 'loan': [loan],
     'contact': [contact], 'campaign': [campaign], 'pdays': [pdays], 'previous': [previous], 'emp.var.rate': [emp_var_rate],
-    'cons.price.idx': [cons_price_idx], 'cons.conf.idx': [cons_conf_idx], 'nr.employed': [nr_employed], 'duration': [duration]
+    'cons.price.idx': [cons_price_idx], 'cons.conf.idx': [cons_conf_idx], 'nr.employed': [nr.employed], 'duration': [duration]
 })
 
 # Preprocess input data

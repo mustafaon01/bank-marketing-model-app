@@ -12,12 +12,12 @@ df = pd.read_csv('bank-additional.csv', sep=';')
 # Preprocess the data
 def preprocess_input(data):
     # Handle missing values
-    data = data.replace('unknown', 'nan')
-    data = data.replace('nonexistent', 'nan')
+    data = data.replace('unknown', np.nan)
+    data = data.replace('nonexistent', np.nan)
     data.fillna(data.mode().iloc[0], inplace=True)
 
     # Drop unnecessary columns
-    data.drop(["day_of_week", "month", "default", "euribor3m"], axis='columns', inplace=True)
+    data.drop(["day_of_week", "month", "default", "euribor3m"], axis='columns', inplace=True, errors='ignore')
 
     # Encode categorical variables using one-hot encoding
     categorical_cols = ['job', 'marital', 'education', 'housing', 'loan', 'contact', 'poutcome']

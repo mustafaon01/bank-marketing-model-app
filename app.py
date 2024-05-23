@@ -26,7 +26,7 @@ def preprocess_input(data):
     data = pd.get_dummies(data, columns=present_categorical_cols, drop_first=True)
 
     # Scale numerical columns
-    numerical_cols = ['age', 'campaign', 'pdays', 'previous', 'emp.var.rate', 'cons.price.idx', 'cons.conf.idx', 'nr.employed', 'duration']
+    numerical_cols = ['age', 'campaign', 'pdays', 'previous', 'emp_var_rate', 'cons_price_idx', 'cons_conf_idx', 'nr_employed', 'duration']
     scaler = StandardScaler()
     data[numerical_cols] = scaler.fit_transform(data[numerical_cols])
 
@@ -59,8 +59,8 @@ duration = st.number_input('Duration of last contact', value=50)
 # Create DataFrame for input data
 input_data = pd.DataFrame({
     'age': [age], 'job': [job], 'marital': [marital], 'education': [education], 'housing': [housing], 'loan': [loan],
-    'contact': [contact], 'campaign': [campaign], 'pdays': [pdays], 'previous': [previous], 'emp.var.rate': [emp_var_rate],
-    'cons.price.idx': [cons_price_idx], 'cons.conf.idx': [cons_conf_idx], 'nr.employed': [nr.employed], 'duration': [duration]
+    'contact': [contact], 'campaign': [campaign], 'pdays': [pdays], 'previous': [previous], 'emp_var_rate': [emp_var_rate],
+    'cons_price_idx': [cons_price_idx], 'cons_conf_idx': [cons_conf_idx], 'nr_employed': [nr_employed], 'duration': [duration]
 })
 
 # Preprocess input data
